@@ -2,10 +2,10 @@
 
 #ifdef __cpp_lib_source_location
 #include <source_location>
-namespace slns = std;
+namespace oxen::log::slns = std;
 #else
 #include <cstdint>
-namespace slns
+namespace oxen::log::slns
 {
   struct source_location
   {

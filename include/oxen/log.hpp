@@ -29,43 +29,89 @@ extern std::shared_ptr<spdlog::sinks::dist_sink_mt> master_sink;
 /// a CategoryLogger, the second argument is an fmt pattern, and the rest of the arguments are
 /// arguments for the formatted string.
 template <typename... T>
-struct trace : detail::LeveledLogger<Level::trace, T...> {
-    using detail::LeveledLogger<Level::trace, T...>::LeveledLogger;
+struct trace {
+    trace([[maybe_unused]] const logger_ptr& cat_logger,
+          [[maybe_unused]] fmt::format_string<T...> fmt,
+          [[maybe_unused]] T&&... args,
+          [[maybe_unused]] const slns::source_location& location =
+                  slns::source_location::current()) {
+#if !defined(NDEBUG) || defined(OXEN_LOGGING_RELEASE_TRACE)
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location), Level::trace, fmt, std::forward<T>(args)...);
+#endif
+    }
 };
 /// Log a "debug" log statement.  Use this as if a function, where the first argument is (typically)
 /// a CategoryLogger, the second argument is an fmt pattern, and the rest of the arguments are
 /// arguments for the formatted string.
 template <typename... T>
-struct debug : detail::LeveledLogger<Level::debug, T...> {
-    using detail::LeveledLogger<Level::debug, T...>::LeveledLogger;
+struct debug {
+    debug(const logger_ptr& cat_logger,
+          fmt::format_string<T...> fmt,
+          T&&... args,
+          const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location), Level::debug, fmt, std::forward<T>(args)...);
+    }
 };
 /// Log a "info" log statement.  Use this as if a function, where the first argument is (typically)
 /// a CategoryLogger, the second argument is an fmt pattern, and the rest of the arguments are
 /// arguments for the formatted string.
 template <typename... T>
-struct info : detail::LeveledLogger<Level::info, T...> {
-    using detail::LeveledLogger<Level::info, T...>::LeveledLogger;
+struct info {
+    info(const logger_ptr& cat_logger,
+         fmt::format_string<T...> fmt,
+         T&&... args,
+         const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location), Level::info, fmt, std::forward<T>(args)...);
+    }
 };
 /// Log a "warning" log statement.  Use this as if a function, where the first argument is
 /// (typically) a CategoryLogger, the second argument is an fmt pattern, and the rest of the
 /// arguments are arguments for the formatted string.
 template <typename... T>
-struct warning : detail::LeveledLogger<Level::warn, T...> {
-    using detail::LeveledLogger<Level::warn, T...>::LeveledLogger;
+struct warning {
+    warning(const logger_ptr& cat_logger,
+            fmt::format_string<T...> fmt,
+            T&&... args,
+            const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location), Level::warn, fmt, std::forward<T>(args)...);
+    }
 };
 /// Log a "error" log statement.  Use this as if a function, where the first argument is (typically)
 /// a CategoryLogger, the second argument is an fmt pattern, and the rest of the arguments are
 /// arguments for the formatted string.
 template <typename... T>
-struct error : detail::LeveledLogger<Level::err, T...> {
-    using detail::LeveledLogger<Level::err, T...>::LeveledLogger;
+struct error {
+    error(const logger_ptr& cat_logger,
+          fmt::format_string<T...> fmt,
+          T&&... args,
+          const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location), Level::err, fmt, std::forward<T>(args)...);
+    }
 };
 /// Log a "critical" log statement.  Use this as if a function, where the first argument is
 /// (typically) a CategoryLogger, the second argument is an fmt pattern, and the rest of the
 /// arguments are arguments for the formatted string.
 template <typename... T>
-struct critical : detail::LeveledLogger<Level::critical, T...> {
-    using detail::LeveledLogger<Level::critical, T...>::LeveledLogger;
+struct critical {
+    critical(
+            const logger_ptr& cat_logger,
+            fmt::format_string<T...> fmt,
+            T&&... args,
+            const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location), Level::critical, fmt, std::forward<T>(args)...);
+    }
 };
 
 // Deduction guides for our logging function-like structs; these force all arguments given in the
