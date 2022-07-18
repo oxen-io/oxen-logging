@@ -41,6 +41,8 @@ namespace detail {
 
     void set_default_catlogger_level(Level level) { loggers_default_level_ = level; }
 
+    Level get_default_catlogger_level() { return loggers_default_level_; }
+
 }  // namespace detail
 
 }  // namespace oxen::log

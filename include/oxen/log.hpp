@@ -100,6 +100,10 @@ void reset_level(Level level);
 /// log level of already-initialized category loggers.
 void set_level_default(Level level);
 
+/// Gets the default log level of new loggers (since the last reset_level or set_level_default
+/// call).
+Level get_level_default();
+
 /// Set the log level of a logger
 inline void set_level(const logger_ptr& cat, Level level) {
     cat->set_level(level);

@@ -126,6 +126,12 @@ void set_level_default(Level level) {
     for_each_cat_logger(nullptr, [level]() { detail::set_default_catlogger_level(level); });
 }
 
+Level get_level_default() {
+    Level lvl;
+    for_each_cat_logger(nullptr, [&lvl]() { lvl = detail::get_default_catlogger_level(); });
+    return lvl;
+}
+
 void set_level(std::string cat_name, Level level) {
     Cat(std::move(cat_name))->set_level(level);
 }

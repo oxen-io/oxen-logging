@@ -62,9 +62,12 @@ void for_each_cat_logger(
 namespace detail {
 
     // Internal function that sets the internal variable for default log level of new cat loggers;
-    // must be called with the loggers mutex held.  External callers should use the methods in
-    // log.hpp instead.
+    // must be called with the loggers mutex held (i.e. in a call to `for_each_cat_logger`).
+    // External callers should use the methods in log.hpp instead.
     void set_default_catlogger_level(Level level);
+
+    // Internal function to retrieve the current default.
+    Level get_default_catlogger_level();
 
 }
 
