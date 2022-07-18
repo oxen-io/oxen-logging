@@ -144,10 +144,13 @@ void flush() {
     master_sink->flush();
 }
 
-void add_sink(Type type, std::string_view target, std::optional<std::string> pattern) {
-    auto sink = make_sink(type, target);
-    set_sink_format(sink, pattern);
+void add_sink(spdlog::sink_ptr sink, std::optional<std::string> pattern) {
+    set_sink_format(sink, std::move(pattern));
     master_sink->add_sink(std::move(sink));
+}
+
+void add_sink(Type type, std::string_view target, std::optional<std::string> pattern) {
+    add_sink(make_sink(type, target), std::move(pattern));
 }
 
 void clear_sinks() {
