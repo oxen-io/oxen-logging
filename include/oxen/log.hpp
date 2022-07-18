@@ -30,12 +30,15 @@ extern std::shared_ptr<spdlog::sinks::dist_sink_mt> master_sink;
 /// arguments for the formatted string.
 template <typename... T>
 struct trace {
-    trace([[maybe_unused]] const logger_ptr& cat_logger,
+    trace(const logger_ptr& cat_logger,
           [[maybe_unused]] fmt::format_string<T...> fmt,
           [[maybe_unused]] T&&... args,
           [[maybe_unused]] const slns::source_location& location =
                   slns::source_location::current()) {
-#if !defined(NDEBUG) || defined(OXEN_LOGGING_RELEASE_TRACE)
+#if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
+        // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
+        (void) cat_logger;
+#else
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::trace, fmt, std::forward<T>(args)...);
