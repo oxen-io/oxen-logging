@@ -52,9 +52,14 @@ namespace {
     }
 
     bool is_ansicolor_sink(const spdlog::sink_ptr& sink) {
+#ifdef _WIN32
+        (void) sink;
+        return false;
+#else
         auto* s = sink.get();
         return is_instance<spdlog::sinks::ansicolor_stdout_sink_mt>(s) ||
                is_instance<spdlog::sinks::ansicolor_stderr_sink_mt>(s);
+#endif
     }
 
     void set_sink_format(const spdlog::sink_ptr& sink, std::optional<std::string> pattern) {
