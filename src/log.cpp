@@ -23,6 +23,14 @@ namespace {
 
     const auto started_at = std::chrono::steady_clock::now();
 
+#if defined(_WIN32)
+    using color_sink_stdout_mt_t = spdlog::sinks::wincolor_stdout_sink_mt;
+    using color_sink_stderr_mt_t = spdlog::sinks::wincolor_stderr_sink_mt;
+#else
+    using color_sink_stdout_mt_t = spdlog::sinks::ansicolor_stdout_sink_mt;
+    using color_sink_stderr_mt_t = spdlog::sinks::ansicolor_stderr_sink_mt;
+#endif
+
     // Custom log formatting flag that prints the elapsed time since startup
     class startup_elapsed_flag : public spdlog::custom_flag_formatter {
       public:
@@ -53,8 +61,8 @@ namespace {
 
     bool is_ansicolor_sink(const spdlog::sink_ptr& sink) {
         auto* s = sink.get();
-        return is_instance<spdlog::sinks::ansicolor_stdout_sink_mt>(s) ||
-               is_instance<spdlog::sinks::ansicolor_stderr_sink_mt>(s);
+        return is_instance<color_sink_stdout_mt_t>(s) ||
+               is_instance<color_sink_stderr_mt_t>(s);
     }
 
     void set_sink_format(const spdlog::sink_ptr& sink, std::optional<std::string> pattern) {
@@ -79,12 +87,12 @@ namespace {
 
             case Type::Print:
                 if (arg.empty() || arg == "stdout" || arg == "-")
-                    sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(
+                    sink = std::make_shared<color_sink_stdout_mt_t>(
                             spdlog::color_mode::always);
                 else if (arg == "nocolor" || arg == "stdout-nocolor")
                     sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
                 else if (arg == "stderr")
-                    sink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>(
+                    sink = std::make_shared<color_sink_stderr_mt_t>(
                             spdlog::color_mode::always);
                 else if (arg == "stderr-nocolor")
                     sink = std::make_shared<spdlog::sinks::stderr_sink_mt>();
@@ -99,7 +107,7 @@ namespace {
                 break;
 
             case Type::System:
-#ifdef _WIN32
+#if defined(_WIN32)
                 sink = std::make_shared<spdlog::sinks::win_eventlog_sink_mt>("lokinet");
 #elif defined(ANDROID)
                 sink = std::make_shared<spdlog::sinks::android_sink_mt>("lokinet");
