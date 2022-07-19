@@ -11,8 +11,6 @@
 #include <spdlog/sinks/win_eventlog_sink.h>
 #elif defined(ANDROID)
 #include <spdlog/sinks/android_sink.h>
-#elif defined(__APPLE__)
-#error FIXME - need a macos logging adapter
 #else
 #include <spdlog/sinks/syslog_sink.h>
 #endif
