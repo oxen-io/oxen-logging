@@ -106,8 +106,6 @@ namespace {
                 sink = std::make_shared<spdlog::sinks::win_eventlog_sink_mt>("lokinet");
 #elif defined(ANDROID)
                 sink = std::make_shared<spdlog::sinks::android_sink_mt>("lokinet");
-#elif defined(__APPLE__)
-                throw std::runtime_error{"FIXME not implemented yet"};
 #else
                 sink = std::make_shared<spdlog::sinks::syslog_sink_mt>(
                         "lokinet", 0, LOG_DAEMON, true);
