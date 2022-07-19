@@ -39,4 +39,10 @@ inline auto spdlog_sloc(const slns::source_location& loc) {
     return spdlog::source_loc{filename.data(), static_cast<int>(loc.line()), loc.function_name()};
 }
 
+inline void make_lc(std::string& s) {
+    for (char& c : s)
+        if (c >= 'A' && c <= 'Z')
+            c += 'a' - 'A';
+}
+
 }  // namespace oxen::log::detail

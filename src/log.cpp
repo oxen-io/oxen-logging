@@ -77,9 +77,6 @@ namespace {
         spdlog::sink_ptr sink;
 
         switch (type) {
-            case Type::Unknown:
-                throw std::runtime_error{"logger initialized with unknown log type"};
-
             case Type::Print:
                 if (arg.empty() || arg == "stdout" || arg == "-")
                     sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(

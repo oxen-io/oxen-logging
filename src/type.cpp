@@ -1,10 +1,12 @@
 #include <oxen/log/type.hpp>
+#include <oxen/log/internal.hpp>
+#include <fmt/core.h>
 
 namespace oxen::log {
 
-Type type_from_string(std::string_view type) {
-    if (type == "unknown")
-        return Type::Unknown;
+Type type_from_string(std::string type) {
+    detail::make_lc(type);
+
     if (type == "file")
         return Type::File;
     if (type == "print")
@@ -12,17 +14,16 @@ Type type_from_string(std::string_view type) {
     if (type == "system" || type == "syslog")
         return Type::System;
 
-    return Type::Unknown;
+    throw std::invalid_argument{fmt::format("Invalid log type '{}'", type)};
 }
 
 std::string_view to_string(Type type) {
     switch (type) {
-        case Type::Unknown: return "unknown";
         case Type::File: return "file";
         case Type::Print: return "print";
         case Type::System: return "system";
     }
-    return "";
+    return "unknown";
 }
 
 }  // namespace oxen::log
