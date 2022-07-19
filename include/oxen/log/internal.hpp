@@ -32,8 +32,8 @@ inline static constexpr std::string_view strip_prefixes(
 
 inline auto spdlog_sloc(const slns::source_location& loc) {
     std::string_view filename{loc.file_name()};
-#ifdef OXEN_LOG_SOURCE_ROOT
-    filename = strip_prefixes(filename, #OXEN_LOG_SOURCE_ROOT, "..", "/");
+#ifdef OXEN_LOGGING_SOURCE_ROOT
+    filename = strip_prefixes(filename, OXEN_LOGGING_SOURCE_ROOT, "..", "/");
 #endif
 
     return spdlog::source_loc{filename.data(), static_cast<int>(loc.line()), loc.function_name()};

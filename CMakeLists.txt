@@ -66,7 +66,10 @@ target_link_libraries(oxen-logging PUBLIC ${OXEN_LOGGING_FMT_TARGET} ${OXEN_LOGG
 target_compile_features(oxen-logging PUBLIC cxx_std_17)
 
 if(OXEN_LOGGING_SOURCE_ROOT)
-    target_compile_definitions(oxen-logging PUBLIC "OXEN_LOGGING_SOURCE_ROOT=${OXEN_LOGGING_SOURCE_ROOT}")
+    message(STATUS "Stripping source root ${OXEN_LOGGING_SOURCE_ROOT} from log paths")
+    target_compile_definitions(oxen-logging PUBLIC "OXEN_LOGGING_SOURCE_ROOT=\"${OXEN_LOGGING_SOURCE_ROOT}\"")
+else()
+    message(STATUS "Source root log path stripping disabled")
 endif()
 
 if (OXEN_LOGGING_RELEASE_TRACE)
