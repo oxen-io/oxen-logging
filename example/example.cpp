@@ -1,5 +1,5 @@
 #include <oxen/log.hpp>
-
+#include <fmt/color.h>
 
 int main() {
     using namespace oxen::log;
@@ -36,4 +36,17 @@ int main() {
     set_level(cat_bar, Level::debug);
     info(cat_foo, "hello {}", 42);
     info(cat_bar, "hello {}", 42);
+
+    info(cat_bar, fg(fmt::color::green), "green!");
+    info(cat_bar, fg(fmt::color::red), "red!");
+    critical(
+            cat_foo,
+            fg(fmt::color::black) | bg(fmt::color::yellow) | fmt::emphasis::bold |
+                    fmt::emphasis::underline | fmt::emphasis::italic,
+            "BLACK");
+    error(cat_foo,
+          fg(fmt::color::white) | bg(fmt::color::red) | fmt::emphasis::bold |
+                  fmt::emphasis::underline | fmt::emphasis::italic,
+          "WHITE {}",
+          42);
 }
