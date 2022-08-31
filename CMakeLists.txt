@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10...3.23)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(oxen-logging VERSION 0.0.1 LANGUAGES CXX)
+project(oxen-logging VERSION 1.0.0 LANGUAGES CXX)
 
 set(OXEN_LOGGING_SOURCE_ROOT "" CACHE PATH "Base path to strip from log message filenames")
 option(OXEN_LOGGING_FORCE_SUBMODULES "Force use of the bundled fmt/spdlog rather than looking for system packages" OFF)
