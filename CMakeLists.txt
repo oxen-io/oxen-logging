@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10...3.23)
+cmake_minimum_required(VERSION 3.13...3.23)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -77,3 +77,7 @@ if (OXEN_LOGGING_RELEASE_TRACE)
 endif()
 
 add_library(oxen::logging ALIAS oxen-logging)
+
+# Expose the fmt::fmt and spdlog::spdlog targets to the parent, when used as a subproject
+set_target_properties(fmt::fmt PROPERTIES IMPORTED_GLOBAL TRUE)
+set_target_properties(spdlog::spdlog PROPERTIES IMPORTED_GLOBAL TRUE)
