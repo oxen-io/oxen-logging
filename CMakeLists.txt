@@ -15,6 +15,10 @@ if(NOT OXEN_LOGGING_FORCE_SUBMODULES)
         find_package(fmt 9.0.0 CONFIG QUIET)
         if(fmt_FOUND)
             message(STATUS "Found fmt ${fmt_VERSION}")
+            # Make the target available to the parent project (which is the case if we go by
+            # subproject, but isn't for packages we find via find_package).  cmake 3.24+ has a
+            # `GLOBAL` flag in the find_package, but we need this to work on older cmakes as well.
+            set_target_properties(fmt::fmt PROPERTIES IMPORTED_GLOBAL TRUE)
         else()
             message(STATUS "Did not find suitable fmt; using submodule")
         endif()
@@ -23,6 +27,8 @@ if(NOT OXEN_LOGGING_FORCE_SUBMODULES)
         find_package(spdlog 1.9.1 CONFIG QUIET)
         if(spdlog_FOUND)
             message(STATUS "Found spdlog ${spdlog_VERSION}")
+            # Make available in parent; see above.
+            set_target_properties(spdlog::spdlog PROPERTIES IMPORTED_GLOBAL TRUE)
         else()
             message(STATUS "Did not find suitable spdlog; using submodule")
         endif()
