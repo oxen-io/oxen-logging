@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13...3.23)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(oxen-logging VERSION 1.0.0 LANGUAGES CXX)
+project(oxen-logging VERSION 1.0.1 LANGUAGES CXX)
 
 set(OXEN_LOGGING_SOURCE_ROOT "" CACHE PATH "Base path to strip from log message filenames")
 option(OXEN_LOGGING_FORCE_SUBMODULES "Force use of the bundled fmt/spdlog rather than looking for system packages" OFF)
@@ -77,7 +77,3 @@ if (OXEN_LOGGING_RELEASE_TRACE)
 endif()
 
 add_library(oxen::logging ALIAS oxen-logging)
-
-# Expose the fmt::fmt and spdlog::spdlog targets to the parent, when used as a subproject
-set_target_properties(fmt::fmt PROPERTIES IMPORTED_GLOBAL TRUE)
-set_target_properties(spdlog::spdlog PROPERTIES IMPORTED_GLOBAL TRUE)
