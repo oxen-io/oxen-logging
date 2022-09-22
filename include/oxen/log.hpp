@@ -11,6 +11,7 @@
 #include "log/source_location.hpp"
 #include "log/level.hpp"
 #include "log/type.hpp"
+#include "log/color.hpp"
 #include "log/internal.hpp"
 #include "log/catlogger.hpp"
 
@@ -37,11 +38,29 @@ struct trace {
                   slns::source_location::current()) {
 #if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
         // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
-        (void) cat_logger;
+        (void)cat_logger;
 #else
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::trace, fmt, std::forward<T>(args)...);
+#endif
+    }
+    trace(const logger_ptr& cat_logger,
+          [[maybe_unused]] const fmt::text_style& sty,
+          [[maybe_unused]] fmt::format_string<T...> fmt,
+          [[maybe_unused]] T&&... args,
+          [[maybe_unused]] const slns::source_location& location =
+                  slns::source_location::current()) {
+#if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
+        // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
+        (void)cat_logger;
+#else
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location),
+                    Level::trace,
+                    "{}",
+                    detail::text_style_wrapper<T...>{sty, fmt, args...});
 #endif
     }
 };
@@ -58,6 +77,18 @@ struct debug {
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::debug, fmt, std::forward<T>(args)...);
     }
+    debug(const logger_ptr& cat_logger,
+          const fmt::text_style& sty,
+          fmt::format_string<T...> fmt,
+          T&&... args,
+          const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location),
+                    Level::debug,
+                    "{}",
+                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+    }
 };
 /// Log a "info" log statement.  Use this as if a function, where the first argument is (typically)
 /// a CategoryLogger, the second argument is an fmt pattern, and the rest of the arguments are
@@ -71,6 +102,18 @@ struct info {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::info, fmt, std::forward<T>(args)...);
+    }
+    info(const logger_ptr& cat_logger,
+         const fmt::text_style& sty,
+         fmt::format_string<T...> fmt,
+         T&&... args,
+         const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location),
+                    Level::info,
+                    "{}",
+                    detail::text_style_wrapper<T...>{sty, fmt, args...});
     }
 };
 /// Log a "warning" log statement.  Use this as if a function, where the first argument is
@@ -86,6 +129,18 @@ struct warning {
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::warn, fmt, std::forward<T>(args)...);
     }
+    warning(const logger_ptr& cat_logger,
+            const fmt::text_style& sty,
+            fmt::format_string<T...> fmt,
+            T&&... args,
+            const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location),
+                    Level::warn,
+                    "{}",
+                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+    }
 };
 /// Log a "error" log statement.  Use this as if a function, where the first argument is (typically)
 /// a CategoryLogger, the second argument is an fmt pattern, and the rest of the arguments are
@@ -99,6 +154,18 @@ struct error {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::err, fmt, std::forward<T>(args)...);
+    }
+    error(const logger_ptr& cat_logger,
+          const fmt::text_style& sty,
+          fmt::format_string<T...> fmt,
+          T&&... args,
+          const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location),
+                    Level::err,
+                    "{}",
+                    detail::text_style_wrapper<T...>{sty, fmt, args...});
     }
 };
 /// Log a "critical" log statement.  Use this as if a function, where the first argument is
@@ -115,6 +182,19 @@ struct critical {
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::critical, fmt, std::forward<T>(args)...);
     }
+    critical(
+            const logger_ptr& cat_logger,
+            const fmt::text_style& sty,
+            fmt::format_string<T...> fmt,
+            T&&... args,
+            const slns::source_location& location = slns::source_location::current()) {
+        if (cat_logger)
+            cat_logger->log(
+                    detail::spdlog_sloc(location),
+                    Level::critical,
+                    "{}",
+                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+    }
 };
 
 // Deduction guides for our logging function-like structs; these force all arguments given in the
@@ -124,21 +204,39 @@ struct critical {
 // work with the trailing defaulted value).
 template <typename... T>
 trace(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> trace<T...>;
+template <typename... T>
+trace(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
+        -> trace<T...>;
 
 template <typename... T>
 debug(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> debug<T...>;
+template <typename... T>
+debug(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
+        -> debug<T...>;
 
 template <typename... T>
 info(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> info<T...>;
+template <typename... T>
+info(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
+        -> info<T...>;
 
 template <typename... T>
 warning(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> warning<T...>;
+template <typename... T>
+warning(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
+        -> warning<T...>;
 
 template <typename... T>
 error(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> error<T...>;
+template <typename... T>
+error(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
+        -> error<T...>;
 
 template <typename... T>
 critical(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> critical<T...>;
+template <typename... T>
+critical(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
+        -> critical<T...>;
 
 /// Resets the log level of all existing category loggers, and sets a new default for any created
 /// after this call.  If this has not been called, the default log level of category loggers is
