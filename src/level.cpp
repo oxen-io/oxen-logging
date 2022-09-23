@@ -1,5 +1,6 @@
 #include <oxen/log/level.hpp>
 #include <oxen/log/internal.hpp>
+#include <oxen/log/format.hpp>
 #include <stdexcept>
 #include <spdlog/common.h>
 #include <string_view>
@@ -19,7 +20,7 @@ Level level_from_string(std::string level) {
         return spdlog::level::off;
     if (auto l = spdlog::level::from_str(level); l != spdlog::level::off)
         return l;
-    throw std::invalid_argument{fmt::format("Invalid log level '{}'", level)};
+    throw std::invalid_argument{"Invalid log level '{}'"_format(level)};
 }
 
 }  // namespace oxen::log

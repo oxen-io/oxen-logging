@@ -1,6 +1,7 @@
 #include <oxen/log.hpp>
 #include <oxen/log/type.hpp>
 #include <oxen/log/catlogger.hpp>
+#include <oxen/log/format.hpp>
 
 #include <chrono>
 
@@ -90,7 +91,7 @@ namespace {
                     sink = std::make_shared<spdlog::sinks::stderr_sink_mt>();
                 else
                     throw std::invalid_argument{
-                            fmt::format("{} is not a valid target for type=Print logging", arg)};
+                            "{} is not a valid target for type=Print logging"_format(arg)};
                 break;
 
             case Type::File:
