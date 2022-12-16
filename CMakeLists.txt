@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.13...3.23)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(oxen-logging VERSION 1.0.1 LANGUAGES CXX)
+project(oxen-logging VERSION 1.0.2 LANGUAGES CXX)
 
-set(OXEN_LOGGING_SOURCE_ROOT "" CACHE PATH "Base path to strip from log message filenames")
+set(OXEN_LOGGING_SOURCE_ROOT "" CACHE PATH "Base path(s) to strip from log message filenames; separate multiple paths with \";\"")
 option(OXEN_LOGGING_FORCE_SUBMODULES "Force use of the bundled fmt/spdlog rather than looking for system packages" OFF)
 option(OXEN_LOGGING_RELEASE_TRACE "Enable trace logging in release builds" OFF)
 option(OXEN_LOGGING_FMT_HEADER_ONLY "Use fmt in header-only mode" OFF)
@@ -72,8 +72,18 @@ target_link_libraries(oxen-logging PUBLIC ${OXEN_LOGGING_FMT_TARGET} ${OXEN_LOGG
 target_compile_features(oxen-logging PUBLIC cxx_std_17)
 
 if(OXEN_LOGGING_SOURCE_ROOT)
-    message(STATUS "Stripping source root ${OXEN_LOGGING_SOURCE_ROOT} from log paths")
-    target_compile_definitions(oxen-logging PUBLIC "OXEN_LOGGING_SOURCE_ROOT=\"${OXEN_LOGGING_SOURCE_ROOT}\"")
+    set(paths)
+    foreach(path ${OXEN_LOGGING_SOURCE_ROOT})
+        string(REGEX REPLACE "([\\\"])" "\\\\\\1" path_escaped "${path}")
+        list(APPEND paths "\"${path_escaped}\"")
+        message(STATUS "Stripping source root ${path} (${path_escaped}) from log paths")
+    endforeach()
+    list(LENGTH paths pathlen)
+    list(JOIN paths ", " paths)
+    target_compile_definitions(oxen-logging PUBLIC
+        OXEN_LOGGING_SOURCE_ROOTS=${paths}
+        OXEN_LOGGING_SOURCE_ROOTS_LEN=${pathlen}
+    )
 else()
     message(STATUS "Source root log path stripping disabled")
 endif()
