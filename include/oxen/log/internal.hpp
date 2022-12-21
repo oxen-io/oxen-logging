@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <spdlog/spdlog.h>
 #include "type.hpp"
 #include "source_location.hpp"
