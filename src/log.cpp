@@ -101,12 +101,12 @@ namespace {
 
             case Type::System:
 #ifdef _WIN32
-                sink = std::make_shared<spdlog::sinks::win_eventlog_sink_mt>("lokinet");
+                sink = std::make_shared<spdlog::sinks::win_eventlog_sink_mt>(std::string{arg});
 #elif defined(ANDROID)
-                sink = std::make_shared<spdlog::sinks::android_sink_mt>("lokinet");
+                sink = std::make_shared<spdlog::sinks::android_sink_mt>(std::string{arg});
 #else
                 sink = std::make_shared<spdlog::sinks::syslog_sink_mt>(
-                        "lokinet", 0, LOG_DAEMON, true);
+                        std::string{arg}, 0, LOG_DAEMON, true);
 #endif
                 break;
         }
