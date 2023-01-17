@@ -286,7 +286,7 @@ const std::string DEFAULT_PATTERN_MONO = "[%Y-%m-%d %T] [%*] [%n:%^%l%$|%g:%#] %
 ///   - for print sinks, target can be "", "-", "stdout" for coloured stdout; "stderr" for coloured
 ///     stderr; "nocolor" or "stdout-nocolor" for monochrome stdout; or "stderr-nocolor" for
 ///     monochrome stderr.
-///   - for syslink sinks, target is an application identifier (e.g. "lokinet")
+///   - for syslog sinks, target is an application identifier (e.g. "lokinet")
 /// • pattern is an log output format pattern to use instead of the default.  This is a standard
 ///   spdlog formatting string with custom format '%*' added to print a time-elapsed-since-startup
 ///   value.
