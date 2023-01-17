@@ -73,40 +73,40 @@ namespace {
         sink->set_formatter(std::move(formatter));
     }
 
-    spdlog::sink_ptr make_sink(Type type, std::string_view arg) {
+    spdlog::sink_ptr make_sink(Type type, std::string_view target) {
 
         spdlog::sink_ptr sink;
 
         switch (type) {
             case Type::Print:
-                if (arg.empty() || arg == "stdout" || arg == "-")
+                if (target.empty() || target == "stdout" || target == "-")
                     sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>(
                             spdlog::color_mode::always);
-                else if (arg == "nocolor" || arg == "stdout-nocolor")
+                else if (target == "nocolor" || target == "stdout-nocolor")
                     sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
-                else if (arg == "stderr")
+                else if (target == "stderr")
                     sink = std::make_shared<spdlog::sinks::stderr_color_sink_mt>(
                             spdlog::color_mode::always);
-                else if (arg == "stderr-nocolor")
+                else if (target == "stderr-nocolor")
                     sink = std::make_shared<spdlog::sinks::stderr_sink_mt>();
                 else
                     throw std::invalid_argument{
-                            "{} is not a valid target for type=Print logging"_format(arg)};
+                            "{} is not a valid target for type=Print logging"_format(target)};
                 break;
 
             case Type::File:
                 // throws on error
-                sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(std::string{arg});
+                sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(std::string{target});
                 break;
 
             case Type::System:
 #ifdef _WIN32
-                sink = std::make_shared<spdlog::sinks::win_eventlog_sink_mt>("lokinet");
+                sink = std::make_shared<spdlog::sinks::win_eventlog_sink_mt>(std::string{target});
 #elif defined(ANDROID)
-                sink = std::make_shared<spdlog::sinks::android_sink_mt>("lokinet");
+                sink = std::make_shared<spdlog::sinks::android_sink_mt>(std::string{target});
 #else
                 sink = std::make_shared<spdlog::sinks::syslog_sink_mt>(
-                        "lokinet", 0, LOG_DAEMON, true);
+                        std::string{target}, 0, LOG_DAEMON, true);
 #endif
                 break;
         }
