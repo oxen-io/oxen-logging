@@ -72,6 +72,11 @@ add_library(oxen-logging STATIC
     src/log.cpp
     src/type.cpp
 )
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL GNU AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13 AND fmt_VERSION VERSION_LESS 10.0.1)
+    target_compile_options(oxen-logging PUBLIC -Wno-error=dangling-reference)
+endif()
+
 target_include_directories(oxen-logging PUBLIC include)
 target_link_libraries(oxen-logging PUBLIC ${OXEN_LOGGING_FMT_TARGET} ${OXEN_LOGGING_SPDLOG_TARGET})
 target_compile_features(oxen-logging PUBLIC cxx_std_17)
