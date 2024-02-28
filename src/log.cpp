@@ -20,10 +20,26 @@ namespace oxen::log {
 
 namespace {
 
+    using namespace std::literals;
+
     const auto started_at = std::chrono::steady_clock::now();
 
     // Custom log formatting flag that prints the elapsed time since startup
     class startup_elapsed_flag : public spdlog::custom_flag_formatter {
+      private:
+#if OXEN_LOGGING_CPLUSPLUS >= 202002L
+        static constexpr fmt::format_string<
+                std::chrono::hours::rep,
+                std::chrono::minutes::rep,
+                std::chrono::seconds::rep,
+                std::chrono::milliseconds::rep>
+#else
+        static constexpr std::string_view
+                format_hours{"+{0:d}h{1:02d}m{2:02d}.{3:03d}s"},  // >= 1h
+                format_minutes{"+{1:d}m{2:02d}.{3:03d}s"},        // >= 1min
+                format_seconds{"+{2:d}.{3:03d}s"};                // < 1min
+#endif
+
       public:
         void format(const spdlog::details::log_msg&, const std::tm&, spdlog::memory_buf_t& dest)
                 override {
@@ -31,9 +47,9 @@ namespace {
             auto elapsed = std::chrono::steady_clock::now() - started_at;
 
             dest.append(fmt::format(
-                    elapsed >= 1h     ? "+{0:d}h{1:02d}m{2:02d}.{3:03d}s"
-                    : elapsed >= 1min ? "+{1:d}m{2:02d}.{3:03d}s"
-                                      : "+{2:d}.{3:03d}s",
+                    elapsed >= 1h     ? format_hours
+                    : elapsed >= 1min ? format_minutes
+                                      : format_seconds,
                     std::chrono::duration_cast<std::chrono::hours>(elapsed).count(),
                     (std::chrono::duration_cast<std::chrono::minutes>(elapsed) % 1h).count(),
                     (std::chrono::duration_cast<std::chrono::seconds>(elapsed) % 1min).count(),
@@ -52,7 +68,7 @@ namespace {
 
     bool is_ansicolor_sink(const spdlog::sink_ptr& sink) {
 #ifdef _WIN32
-        (void) sink;
+        (void)sink;
         return false;
 #else
         auto* s = sink.get();
