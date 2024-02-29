@@ -35,10 +35,10 @@ namespace {
                 std::chrono::milliseconds::rep>
 #else
         static constexpr std::string_view
+#endif
                 format_hours{"+{0:d}h{1:02d}m{2:02d}.{3:03d}s"},  // >= 1h
                 format_minutes{"+{1:d}m{2:02d}.{3:03d}s"},        // >= 1min
                 format_seconds{"+{2:d}.{3:03d}s"};                // < 1min
-#endif
 
       public:
         void format(const spdlog::details::log_msg&, const std::tm&, spdlog::memory_buf_t& dest)

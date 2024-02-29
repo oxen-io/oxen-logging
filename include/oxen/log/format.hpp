@@ -55,7 +55,7 @@ namespace detail {
 
         consteval string_literal(const char (&s)[N]) { std::copy(s, s + N, str.begin()); }
 
-        consteval std::string_view sv() const { return {str.data(), N}; }
+        consteval std::string_view sv() const { return {str.data(), N-1}; }
     };
 
     // Internal implementation of _format that holds the format as a compile-time string in the type
