@@ -8,7 +8,6 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/dist_sink.h>
 
-#include "log/source_location.hpp"
 #include "log/level.hpp"
 #include "log/type.hpp"
 #include "log/color.hpp"
@@ -34,8 +33,8 @@ struct trace {
     trace(const logger_ptr& cat_logger,
           [[maybe_unused]] fmt::format_string<T...> fmt,
           [[maybe_unused]] T&&... args,
-          [[maybe_unused]] const slns::source_location& location =
-                  slns::source_location::current()) {
+          [[maybe_unused]] const std::source_location& location =
+                  std::source_location::current()) {
 #if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
         // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
         (void)cat_logger;
@@ -49,8 +48,8 @@ struct trace {
           [[maybe_unused]] const fmt::text_style& sty,
           [[maybe_unused]] fmt::format_string<T...> fmt,
           [[maybe_unused]] T&&... args,
-          [[maybe_unused]] const slns::source_location& location =
-                  slns::source_location::current()) {
+          [[maybe_unused]] const std::source_location& location =
+                  std::source_location::current()) {
 #if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
         // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
         (void)cat_logger;
@@ -72,7 +71,7 @@ struct debug {
     debug(const logger_ptr& cat_logger,
           fmt::format_string<T...> fmt,
           T&&... args,
-          const slns::source_location& location = slns::source_location::current()) {
+          const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::debug, fmt, std::forward<T>(args)...);
@@ -81,7 +80,7 @@ struct debug {
           const fmt::text_style& sty,
           fmt::format_string<T...> fmt,
           T&&... args,
-          const slns::source_location& location = slns::source_location::current()) {
+          const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location),
@@ -98,7 +97,7 @@ struct info {
     info(const logger_ptr& cat_logger,
          fmt::format_string<T...> fmt,
          T&&... args,
-         const slns::source_location& location = slns::source_location::current()) {
+         const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::info, fmt, std::forward<T>(args)...);
@@ -107,7 +106,7 @@ struct info {
          const fmt::text_style& sty,
          fmt::format_string<T...> fmt,
          T&&... args,
-         const slns::source_location& location = slns::source_location::current()) {
+         const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location),
@@ -124,7 +123,7 @@ struct warning {
     warning(const logger_ptr& cat_logger,
             fmt::format_string<T...> fmt,
             T&&... args,
-            const slns::source_location& location = slns::source_location::current()) {
+            const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::warn, fmt, std::forward<T>(args)...);
@@ -133,7 +132,7 @@ struct warning {
             const fmt::text_style& sty,
             fmt::format_string<T...> fmt,
             T&&... args,
-            const slns::source_location& location = slns::source_location::current()) {
+            const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location),
@@ -150,7 +149,7 @@ struct error {
     error(const logger_ptr& cat_logger,
           fmt::format_string<T...> fmt,
           T&&... args,
-          const slns::source_location& location = slns::source_location::current()) {
+          const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::err, fmt, std::forward<T>(args)...);
@@ -159,7 +158,7 @@ struct error {
           const fmt::text_style& sty,
           fmt::format_string<T...> fmt,
           T&&... args,
-          const slns::source_location& location = slns::source_location::current()) {
+          const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location),
@@ -177,7 +176,7 @@ struct critical {
             const logger_ptr& cat_logger,
             fmt::format_string<T...> fmt,
             T&&... args,
-            const slns::source_location& location = slns::source_location::current()) {
+            const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location), Level::critical, fmt, std::forward<T>(args)...);
@@ -187,7 +186,7 @@ struct critical {
             const fmt::text_style& sty,
             fmt::format_string<T...> fmt,
             T&&... args,
-            const slns::source_location& location = slns::source_location::current()) {
+            const std::source_location& location = std::source_location::current()) {
         if (cat_logger)
             cat_logger->log(
                     detail::spdlog_sloc(location),

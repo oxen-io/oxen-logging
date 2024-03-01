@@ -79,7 +79,7 @@ endif()
 
 target_include_directories(oxen-logging PUBLIC include)
 target_link_libraries(oxen-logging PUBLIC ${OXEN_LOGGING_FMT_TARGET} ${OXEN_LOGGING_SPDLOG_TARGET})
-target_compile_features(oxen-logging PUBLIC cxx_std_17)
+target_compile_features(oxen-logging PUBLIC cxx_std_20)
 
 if(OXEN_LOGGING_SOURCE_ROOT)
     set(paths)
