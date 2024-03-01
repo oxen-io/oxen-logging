@@ -39,9 +39,13 @@ void for_each_cat_logger(
 
 namespace detail {
 
-    void set_default_catlogger_level(Level level) { loggers_default_level_ = level; }
+    void set_default_catlogger_level(Level level) {
+        loggers_default_level_ = level;
+    }
 
-    Level get_default_catlogger_level() { return loggers_default_level_; }
+    Level get_default_catlogger_level() {
+        return loggers_default_level_;
+    }
 
 }  // namespace detail
 

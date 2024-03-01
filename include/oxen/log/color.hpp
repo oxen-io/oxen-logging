@@ -19,22 +19,21 @@ struct text_style_wrapper {
     fmt::basic_string_view<char> fmt;
     const std::tuple<const T&...> args;
 
-    text_style_wrapper(const fmt::text_style& sty, fmt::format_string<T...> fmt, const T&... args)
-        : sty{sty}, fmt{fmt}, args{std::tie(args...)} {}
+    text_style_wrapper(const fmt::text_style& sty, fmt::format_string<T...> fmt, const T&... args) :
+            sty{sty}, fmt{fmt}, args{std::tie(args...)} {}
 };
 
-}
+}  // namespace oxen::log::detail
 
 template <typename... T>
 struct fmt::formatter<oxen::log::detail::text_style_wrapper<T...>> {
     constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const oxen::log::detail::text_style_wrapper<T...>& f, FormatContext& ctx)
-    {
+    auto format(const oxen::log::detail::text_style_wrapper<T...>& f, FormatContext& ctx) {
         auto out = ctx.out();
         return std::apply(
-                [&](const auto&... args) {
-                    return fmt::format_to(out, f.sty, f.fmt, args...); }, f.args);
+                [&](const auto&... args) { return fmt::format_to(out, f.sty, f.fmt, args...); },
+                f.args);
     }
 };

@@ -33,8 +33,7 @@ struct trace {
     trace(const logger_ptr& cat_logger,
           [[maybe_unused]] fmt::format_string<T...> fmt,
           [[maybe_unused]] T&&... args,
-          [[maybe_unused]] const std::source_location& location =
-                  std::source_location::current()) {
+          [[maybe_unused]] const std::source_location& location = std::source_location::current()) {
 #if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
         // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
         (void)cat_logger;
@@ -48,8 +47,7 @@ struct trace {
           [[maybe_unused]] const fmt::text_style& sty,
           [[maybe_unused]] fmt::format_string<T...> fmt,
           [[maybe_unused]] T&&... args,
-          [[maybe_unused]] const std::source_location& location =
-                  std::source_location::current()) {
+          [[maybe_unused]] const std::source_location& location = std::source_location::current()) {
 #if defined(NDEBUG) && !defined(OXEN_LOGGING_RELEASE_TRACE)
         // Using [[maybe_unused]] on the *first* ctor argument breaks gcc 8/9
         (void)cat_logger;
@@ -222,8 +220,10 @@ info(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...>
 template <typename... T>
 warning(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> warning<T...>;
 template <typename... T>
-warning(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
-        -> warning<T...>;
+warning(const logger_ptr& cat,
+        const fmt::text_style& sty,
+        fmt::format_string<T...> fmt,
+        T&&... args) -> warning<T...>;
 
 template <typename... T>
 error(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> error<T...>;
@@ -234,8 +234,11 @@ error(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...
 template <typename... T>
 critical(const logger_ptr& cat, fmt::format_string<T...> fmt, T&&... args) -> critical<T...>;
 template <typename... T>
-critical(const logger_ptr& cat, const fmt::text_style& sty, fmt::format_string<T...> fmt, T&&... args)
-        -> critical<T...>;
+critical(
+        const logger_ptr& cat,
+        const fmt::text_style& sty,
+        fmt::format_string<T...> fmt,
+        T&&... args) -> critical<T...>;
 
 /// Resets the log level of all existing category loggers, and sets a new default for any created
 /// after this call.  If this has not been called, the default log level of category loggers is
