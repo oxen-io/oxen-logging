@@ -69,6 +69,6 @@ namespace detail {
     // Internal function to retrieve the current default.
     Level get_default_catlogger_level();
 
-}
+}  // namespace detail
 
 }  // namespace oxen::log

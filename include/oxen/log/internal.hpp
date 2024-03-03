@@ -1,15 +1,27 @@
 #pragma once
 
+#if (defined(__GNUC__) && __GNUC__ >= 11) || (defined(__clang__) && __clang_major__ >= 15)
+#include <source_location>
+#else
+#include <experimental/source_location>
+#define USING_EXPERIMENTAL_SRCLOC
+#endif
+
 #include <array>
 #include <spdlog/spdlog.h>
 #include "type.hpp"
-#include "source_location.hpp"
 #include "level.hpp"
+
+using source_location =
+#ifdef USING_EXPERIMENTAL_SRCLOC
+        std::experimental::source_location;
+#else
+        std::source_location;
+#endif
 
 namespace oxen::log {
 
 using logger_ptr = std::shared_ptr<spdlog::logger>;
-
 }
 
 namespace oxen::log::detail {
@@ -30,7 +42,7 @@ inline constexpr std::array<std::string_view, OXEN_LOGGING_SOURCE_ROOTS_LEN> sou
 #endif
 };
 
-inline auto spdlog_sloc(const slns::source_location& loc) {
+inline auto spdlog_sloc(const source_location& loc) {
     std::string_view filename{loc.file_name()};
     for (const auto& prefix : source_prefixes) {
         if (filename.substr(0, prefix.size()) == prefix) {
