@@ -1,3 +1,9 @@
+oxen-logging (1.1.0-2~ubuntu2504) plucky; urgency=medium
+
+  * add plucky debs
+
+ -- Jason Rhinelander <jason@session.foundation>  Wed, 09 Apr 2025 16:09:35 -0300
+
 oxen-logging (1.1.0-2~ubuntu2410) oracular; urgency=medium
 
   * fix fmt11 compatibility
