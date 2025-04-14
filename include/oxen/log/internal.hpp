@@ -46,8 +46,14 @@ bool is_ansicolor_sink(const spdlog::sink_ptr& sink);
 
 inline auto spdlog_sloc(const source_location& loc) {
     std::string_view filename{loc.file_name()};
-    if (auto pos = filename.rfind('/'); pos != std::string_view::npos)
-        filename.remove_prefix(pos + 1);
+    // We try to keep the last two path components, e.g. "bar/x.cpp" from "/home/me/src/bar/x.cpp",
+    // unless we end up with src/x.cpp in which case we drop the src/ and just keep "x.cpp":
+    if (auto pos = filename.rfind('/'); pos != 0 && pos != std::string_view::npos) {
+        if (pos = filename.rfind('/', pos - 1); pos != std::string_view::npos)
+            filename.remove_prefix(pos + 1);
+        if (filename.starts_with("src/"))
+            filename.remove_prefix(4);
+    }
     return spdlog::source_loc{filename.data(), static_cast<int>(loc.line()), loc.function_name()};
 }
 
