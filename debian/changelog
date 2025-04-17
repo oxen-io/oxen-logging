@@ -1,3 +1,11 @@
+oxen-logging (1.1.1-1~ubuntu2004) focal; urgency=medium
+
+  * try this maybe
+  * Fix crash at destruction with multiple static libs
+  * Keep two parts when path stripping, except for src
+
+ -- Jason Rhinelander <jason@session.foundation>  Thu, 17 Apr 2025 18:21:39 -0300
+
 oxen-logging (1.1.0-2~ubuntu2004) focal; urgency=medium
 
   * fix fmt11 compatibility
