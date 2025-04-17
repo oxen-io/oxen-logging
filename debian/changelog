@@ -1,3 +1,12 @@
+oxen-logging (1.1.1-1~deb13) trixie; urgency=medium
+
+  * fix fmt11 compatibility
+  * fix load_fmt_spdlog invocation from parent project
+  * Fix crash at destruction with multiple static libs
+  * Keep two parts when path stripping, except for src
+
+ -- Jason Rhinelander <jason@session.foundation>  Thu, 17 Apr 2025 19:49:10 -0300
+
 oxen-logging (1.1.0-1~deb13) trixie; urgency=medium
 
   * Initial release.
