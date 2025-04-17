@@ -13,27 +13,23 @@ namespace oxen::log::detail {
 //
 // This object should not be called directly; instead call log::info, etc.  with a text style as
 // first argument.
-template <typename... T>
 struct text_style_wrapper {
     const fmt::text_style& sty;
-    fmt::basic_string_view<char> fmt;
-    const std::tuple<const T&...> args;
+    fmt::string_view fmt;
+    fmt::format_args args;
 
-    text_style_wrapper(const fmt::text_style& sty, fmt::format_string<T...> fmt, const T&... args) :
-            sty{sty}, fmt{fmt}, args{std::tie(args...)} {}
+    text_style_wrapper(const fmt::text_style& sty, fmt::string_view fmt, fmt::format_args args) :
+            sty{sty}, fmt{fmt}, args{std::move(args)} {}
 };
 
 }  // namespace oxen::log::detail
 
-template <typename... T>
-struct fmt::formatter<oxen::log::detail::text_style_wrapper<T...>> {
+template <>
+struct fmt::formatter<oxen::log::detail::text_style_wrapper> {
     constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
 
-    template <typename FormatContext>
-    auto format(const oxen::log::detail::text_style_wrapper<T...>& f, FormatContext& ctx) {
+    auto format(const oxen::log::detail::text_style_wrapper& f, fmt::format_context& ctx) const {
         auto out = ctx.out();
-        return std::apply(
-                [&](const auto&... args) { return fmt::format_to(out, f.sty, f.fmt, args...); },
-                f.args);
+        return fmt::vformat_to(out, f.sty, f.fmt, f.args);
     }
 };

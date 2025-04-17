@@ -57,7 +57,7 @@ struct trace {
                     detail::spdlog_sloc(location),
                     Level::trace,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
 #endif
     }
 };
@@ -84,7 +84,7 @@ struct debug {
                     detail::spdlog_sloc(location),
                     Level::debug,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
     }
 };
 /// Log a "info" log statement.  Use this as if a function, where the first argument is (typically)
@@ -110,7 +110,7 @@ struct info {
                     detail::spdlog_sloc(location),
                     Level::info,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
     }
 };
 /// Log a "warning" log statement.  Use this as if a function, where the first argument is
@@ -136,7 +136,7 @@ struct warning {
                     detail::spdlog_sloc(location),
                     Level::warn,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
     }
 };
 /// Log a "error" log statement.  Use this as if a function, where the first argument is (typically)
@@ -162,7 +162,7 @@ struct error {
                     detail::spdlog_sloc(location),
                     Level::err,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
     }
 };
 /// Log a "critical" log statement.  Use this as if a function, where the first argument is
@@ -190,7 +190,7 @@ struct critical {
                     detail::spdlog_sloc(location),
                     Level::critical,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
     }
 };
 
@@ -215,7 +215,7 @@ struct log {
                     detail::spdlog_sloc(location),
                     level,
                     "{}",
-                    detail::text_style_wrapper<T...>{sty, fmt, args...});
+                    detail::text_style_wrapper{sty, fmt, fmt::make_format_args(args...)});
     }
 };
 
