@@ -1,3 +1,10 @@
+oxen-logging (1.1.1-1~ubuntu2004+1) focal; urgency=medium
+
+  * drop focal armhf
+  * do not install fmt in header-only mode
+
+ -- Jason Rhinelander <jason@session.foundation>  Tue, 22 Apr 2025 19:02:54 -0300
+
 oxen-logging (1.1.1-1~ubuntu2004) focal; urgency=medium
 
   * try this maybe
