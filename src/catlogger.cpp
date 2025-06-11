@@ -42,11 +42,18 @@ namespace detail {
 
 }  // namespace detail
 
-void CategoryLogger::find_or_make_logger() {
+CategoryLogger::CategoryLogger(std::string name_) : name{std::move(name_)} {
     std::lock_guard lock{detail::loggers_mutex()};
+    // Insert an empty shared_ptr here because we don't want to create the underlying logger until
+    // first use, but we at least want to know the category exists.
+    detail::loggers()[name];
+}
+
+void CategoryLogger::find_or_make_logger() {
     if (have_logger)
         return;
 
+    std::lock_guard lock{detail::loggers_mutex()};
     auto& known_logger = detail::loggers()[name];
     if (!known_logger) {
         known_logger = std::make_shared<spdlog::logger>(name, master_sink);
@@ -63,7 +70,18 @@ void for_each_cat_logger(
     std::lock_guard lock{detail::loggers_mutex()};
     if (f)
         for (auto& [name, logger] : detail::loggers())
-            f(name, *logger);
+            if (logger)
+                f(name, *logger);
+    if (and_then)
+        and_then();
+}
+
+void for_each_cat_name(
+        std::function<void(const std::string& name)> f, std::function<void()> and_then) {
+    std::lock_guard lock{detail::loggers_mutex()};
+    if (f)
+        for (auto& [name, logger] : detail::loggers())
+            f(name);
     if (and_then)
         and_then();
 }
