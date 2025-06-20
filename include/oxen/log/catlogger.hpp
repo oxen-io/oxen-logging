@@ -26,7 +26,7 @@ struct CategoryLogger {
 
     /// Constructor: this stores the name; actually categorized logger initialization is deferred to
     /// the first call to `operator const logger_ptr&` or dereference.
-    explicit CategoryLogger(std::string name) : name{std::move(name)} {}
+    explicit CategoryLogger(std::string name);
 
     /// Returns a shared_ptr to a spdlog::logger for this logging category.  The first time this is
     /// called the logger is initialized: either finding an existing logger (if one with the same
@@ -56,6 +56,11 @@ inline CategoryLogger Cat(std::string cat) {
 void for_each_cat_logger(
         std::function<void(const std::string& name, spdlog::logger& logger)> f,
         std::function<void()> and_then = nullptr);
+
+/// Similar to the above, but just iterates through known category names, even if those names don't
+/// have existing underlying loggers yet.
+void for_each_cat_name(
+        std::function<void(const std::string& name)> f, std::function<void()> and_then = nullptr);
 
 namespace detail {
 
