@@ -1,3 +1,9 @@
+oxen-logging (1.2.0-1~ubuntu2004) focal; urgency=medium
+
+  * Add log string parsing
+
+ -- Jason Rhinelander <jason@session.foundation>  Fri, 20 Jun 2025 17:45:03 -0300
+
 oxen-logging (1.1.1-1~ubuntu2004+1) focal; urgency=medium
 
   * drop focal armhf
