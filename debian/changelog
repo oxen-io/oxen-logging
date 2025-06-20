@@ -1,3 +1,9 @@
+oxen-logging (1.2.0-1~ubuntu2204) jammy; urgency=medium
+
+  * Add log string parsing
+
+ -- Jason Rhinelander <jason@session.foundation>  Fri, 20 Jun 2025 17:44:59 -0300
+
 oxen-logging (1.1.1-1~ubuntu2204+1) jammy; urgency=medium
 
   * drop jammy armhf
