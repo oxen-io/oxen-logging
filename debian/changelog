@@ -1,3 +1,9 @@
+oxen-logging (1.2.0-2~ubuntu2410) oracular; urgency=medium
+
+  * Add missing dependencies to liboxen-logging-dev package
+
+ -- Jason Rhinelander <jason@session.foundation>  Mon, 08 Sep 2025 14:17:36 -0300
+
 oxen-logging (1.2.0-1~ubuntu2410) oracular; urgency=medium
 
   * Add log string parsing
