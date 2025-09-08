@@ -1,3 +1,9 @@
+oxen-logging (1.2.0-2~ubuntu2004+1) focal; urgency=medium
+
+  * rebuild
+
+ -- Jason Rhinelander <jason@session.foundation>  Mon, 08 Sep 2025 16:01:21 -0300
+
 oxen-logging (1.2.0-2~ubuntu2004) focal; urgency=medium
 
   * Add missing dependencies to liboxen-logging-dev package
