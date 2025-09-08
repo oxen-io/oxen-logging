@@ -13,7 +13,7 @@ Homepage: https://github.com/oxen-io/oxen-logging
 Package: liboxen-logging-dev
 Section: libdevel
 Architecture: any
-Depends: liboxen-logging@LIB_VERSION@ (= ${binary:Version}), ${misc:Depends}
+Depends: liboxen-logging@LIB_VERSION@ (= ${binary:Version}), ${misc:Depends}, libfmt-dev (>= 9), libspdlog-dev (>= 1.9.1)
 Description: spdlog-based logging library (headers)
  This C++20 library contains wrappers around fmt and spdlog to provide
  easy-to-use logging facilities.
