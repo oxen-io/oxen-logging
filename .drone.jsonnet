@@ -185,7 +185,9 @@ local clang(version) = debian_pipeline(
   'Debian sid/clang-' + version + ' (amd64)',
   docker_base + 'debian-sid-clang',
   deps=['clang-' + version] + default_deps_base,
-  cmake_extra='-DCMAKE_C_COMPILER=clang-' + version + ' -DCMAKE_CXX_COMPILER=clang++-' + version + ' '
+  cmake_extra='-DCMAKE_C_COMPILER=clang-' + version + ' -DCMAKE_CXX_COMPILER=clang++-' + version + (
+    if version >= 21 then ' -DOXEN_LOGGING_FORCE_SUBMODULES=ON' else ' '
+  )
 );
 
 local full_llvm(version) = debian_pipeline(
@@ -259,24 +261,19 @@ local mac_builder(name,
   // Various debian builds
   debian_pipeline('Debian sid (amd64)', docker_base + 'debian-sid'),
   debian_pipeline('Debian sid/Debug (amd64)', docker_base + 'debian-sid', build_type='Debug'),
-  clang(17),
-  full_llvm(17),
   clang(19),
   full_llvm(19),
+  clang(21),
+  full_llvm(21),
   debian_pipeline('Debian sid', docker_base + 'debian-sid'),
   debian_pipeline('Debian sid/Debug', docker_base + 'debian-sid', build_type='Debug'),
-  debian_pipeline('Debian 11', docker_base + 'debian-bullseye', deps=default_deps, extra_setup=debian_backports('bullseye', ['cmake'])),
-  debian_pipeline('Debian 11/Debug', docker_base + 'debian-bullseye', deps=default_deps, extra_setup=debian_backports('bullseye', ['cmake']), build_type='Debug'),
+  debian_pipeline('Debian 13 trixie', docker_base + 'debian-trixie'),
+  debian_pipeline('Debian 13/Debug', docker_base + 'debian-trixie', build_type='Debug'),
   debian_pipeline('Debian testing (i386)', docker_base + 'debian-testing/i386'),
   debian_pipeline('Debian 12 bookworm (i386)', docker_base + 'debian-bookworm/i386'),
-  debian_pipeline('Debian 11 bullseye', docker_base + 'debian-bullseye', deps=default_deps, extra_setup=debian_backports('bullseye', ['cmake'])),
   debian_pipeline('Ubuntu latest', docker_base + 'ubuntu-rolling'),
+  debian_pipeline('Ubuntu 24.04 noble', docker_base + 'ubuntu-noble'),
   debian_pipeline('Ubuntu 22.04 jammy', docker_base + 'ubuntu-jammy'),
-  debian_pipeline('Ubuntu 20.04 focal',
-                  docker_base + 'ubuntu-focal',
-                  deps=['g++-10'] + default_deps_base,
-                  extra_setup=kitware_repo('focal'),
-                  cmake_extra='-DCMAKE_C_COMPILER=gcc-10 -DCMAKE_CXX_COMPILER=g++-10'),
 
   // ARM builds (ARM64 and armhf)
   debian_pipeline('Debian sid (ARM64)', docker_base + 'debian-sid', arch='arm64', jobs=4),
